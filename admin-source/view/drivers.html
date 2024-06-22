@@ -1,0 +1,35 @@
+<md-content>
+	<md-subheader class="md-primary">{{ vm.driversLoaded ? vm.drivers.length + ' motoristas' : 'Carregando motoristas...' }}</md-subheader>
+	<md-table-container>
+		<table md-table>
+			<thead md-head>
+				<tr md-row>
+					<th md-column>#</th>
+					<th md-column>Nome</th>
+					<th md-column>Telefone</th>
+					<th md-column>Email</th>
+					<th md-column>Status</th>
+					<th md-column>Entrou em</th>
+					<th md-column>Tipo</th>
+					<th md-column>Ações</th>
+				</tr>
+			</thead>
+			<tbody md-body>
+				<tr md-row ng-repeat="driver in vm.drivers | orderBy:_id:true">
+					<td md-cell>{{ driver._id }}</td>
+					<td md-cell>{{ driver.name }}</td>
+					<td md-cell><a ng-href="tel:{{ driver.phone }}">{{ driver.phone }}</a></td>
+					<td md-cell ng-if="driver.hideEmail">Email indisponível</td>
+					<td md-cell ng-if="!driver.hideEmail"><a ng-href="mailto:{{ driver.email }}">{{ driver.email }}</a></td>
+					<td md-cell>{{ driver.active ? 'Ativo' : 'Inativo' }}</td>
+					<td md-cell>{{ driver.registeredAt | date }}</td>
+					<td md-cell>{{ driver.active ? (driver.type === 'executive' ? 'Executivo' : 'Comum') : 'Desativado' }}</td>
+					<td md-cell layout="row">
+						<md-button class="md-primary" ng-href="#!/edit-driver/{{ driver._id }}">Editar</md-button>
+						<md-button class="md-warn" ng-click="vm.deleteDriver(driver._id, $event)">Excluir</md-button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</md-table-container>
+</md-content>

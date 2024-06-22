@@ -1,0 +1,17 @@
+<md-content layout-padding>
+	<form name="addCodeForm" layout="column">
+		<md-input-container>
+			<input type="text" placeholder="Código" name="code" ng-model="code" ng-required="true" />
+			<div ng-messages="addCodeForm.code.$error">
+				<span ng-message="required">Este campo é necessário.</span>
+			</div>
+		</md-input-container>
+        <md-input-container>
+			<input type="text" placeholder="Porcentagem do desconto" name="discount" ng-model="discount" ng-required="true" ui-percentage-mask />
+			<div ng-messages="addCodeForm.discount.$error">
+				<span ng-message="required">Este campo é necessário.</span>
+			</div>
+		</md-input-container>
+		<md-button type="submit" class="md-primary md-raised" ng-click="vm.create({code: code, discount: 1 - discount})" ng-disabled="addCodeForm.$invalid || vm.addCodeButtonDisabled">{{ vm.addCodeButtonDisabled ? 'Criando...' : 'Criar' }}</md-button>
+	</form>
+</md-content>

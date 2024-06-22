@@ -1,0 +1,37 @@
+<md-content layout-padding>
+	<form name="editDriverForm" layout="column">
+		<md-input-container>
+			<input type="email" placeholder="E-mail" name="email" ng-model="vm.driver.email" ng-required="true" />
+			<div ng-messages="editDriverForm.email.$error">
+				<span ng-message="required">Este campo é necessário.</span>
+				<span ng-message="email">O email inserido deve ser válido.</span>
+			</div>
+		</md-input-container>
+		<md-input-container>
+			<input type="text" placeholder="Telefone" name="phone" ng-model="vm.driver.phone" ng-required="true" ui-br-phone-number />
+			<div ng-messages="editDriverForm.phone.$error">
+				<span ng-message="required">Este campo é necessário.</span>
+				<span ng-message="cpf">Insira um número de telefone válido.</span>
+			</div>
+		</md-input-container>
+		<md-input-container>
+			<input type="text" placeholder="CPF" name="cpf" ng-model="vm.driver.cpf" ng-required="true" ui-br-cpf-mask />
+			<div ng-messages="editDriverForm.cpf.$error">
+				<span ng-message="required">Este campo é necessário.</span>
+				<span ng-message="cpf">Insira um CPF válido.</span>
+			</div>
+		</md-input-container>
+		<p>Atividade:</p>
+		<md-radio-group ng-model="vm.driver.active" ng-required="true" name="active">
+			<md-radio-button value="true">Ativo</md-radio-button>
+			<md-radio-button value="false">Inativo</md-radio-button>
+		</md-radio-group>
+		<md-divider></md-divider>
+		<p>Tipo de motorista:</p>
+		<md-radio-group ng-model="vm.driver.type" ng-required="true" name="type">
+			<md-radio-button value="default">Comum</md-radio-button>
+			<md-radio-button value="executive">Executivo</md-radio-button>
+		</md-radio-group>
+		<md-button type="submit" class="md-primary md-raised" ng-click="vm.saveData({active: vm.driver.active, type: vm.driver.type, id: vm.driver._id, email: vm.driver.email, phone: vm.driver.phone, cpf: vm.driver.cpf})" ng-disabled="editDriverForm.$invalid || vm.driverEditButtonDisabled">{{ vm.driverEditButtonDisabled ? 'Salvando...' : 'Salvar' }}</md-button>
+	</form>
+</md-content>

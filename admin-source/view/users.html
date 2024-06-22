@@ -1,0 +1,33 @@
+<md-content>
+	<md-subheader class="md-primary">{{ vm.usersLoaded ? vm.users.length + ' usuários' : 'Carregando usuários...' }}</md-subheader>
+	<md-table-container>
+		<table md-table>
+			<thead md-head>
+				<tr md-row>
+					<th md-column>#</th>
+					<th md-column>Nome</th>
+					<th md-column>Telefone</th>
+					<th md-column>Email</th>
+					<th md-column>Entrou em</th>
+					<th md-column>Status</th>
+					<th md-column>Ações</th>
+				</tr>
+			</thead>
+			<tbody md-body>
+				<tr md-row ng-repeat="user in vm.users | orderBy:_id:true">
+					<td md-cell>{{ user._id }}</td>
+					<td md-cell>{{ user.name }}</td>
+					<td md-cell><a ng-href="tel:{{ user.phone }}">{{ user.phone }}</a></td>
+					<td md-cell ng-if="user.hideEmail">Email indisponível</td>
+					<td md-cell ng-if="!user.hideEmail"><a ng-href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+					<td md-cell>{{ user.registeredAt | date }}</td>
+					<td md-cell>{{ user.blocked ? 'Bloqueado' : 'Ativo' }}
+					<td md-cell layout="row">
+						<md-button class="md-primary" ng-href="#!/edit-user/{{ user._id }}">Editar</md-button>
+						<md-button class="md-warn" ng-click="vm.deleteUser(user._id, $event)">Excluir</md-button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</md-table-container>
+</md-content>

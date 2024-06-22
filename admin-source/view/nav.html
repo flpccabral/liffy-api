@@ -1,0 +1,44 @@
+<md-sidenav class="md-whiteframe-4dp" md-component-id="sidenav" ng-if="adminLogged">
+	<md-toolbar>
+		<div class="md-toolbar-tools" layout-align="space-between center">
+			<span class="md-title">Menu</span>
+			<md-button class="md-icon-button" ng-click="vm.toggleSidenav()">
+				<md-icon class="material-icons">close</md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+	<md-list>
+		<md-list-item ng-href="#!/drivers" ng-class="{'active': vm.route.current.templateUrl === 'view/drivers.html'}" ng-click="vm.toggleSidenav()">
+			<md-icon class="material-icons">directions_car</md-icon>
+			Motoristas
+		</md-list-item>
+		<md-list-item ng-href="#!/users" ng-class="{'active': vm.route.current.templateUrl === 'view/users.html'}" ng-click="vm.toggleSidenav()">
+			<md-icon class="material-icons">people</md-icon>
+			Usuários
+		</md-list-item>
+		<md-list-item ng-href="#!/promotional-codes" ng-class="{'active': vm.route.current.templateUrl === 'view/promotional-codes.html'}" ng-click="vm.toggleSidenav()">
+			<md-icon class="material-icons">card_giftcard</md-icon>
+			Códigos promocionais
+		</md-list-item>
+		<md-list-item ng-href="#!/bugs" ng-class="{'active': vm.route.current.templateUrl === 'view/bugs.html'}" ng-click="vm.toggleSidenav()">
+			<md-icon class="material-icons">bug_report</md-icon>
+			Bugs
+		</md-list-item>
+		<md-list-item ng-href="#!/settings" ng-class="{'active': vm.route.current.templateUrl === 'view/settings.html'}" ng-click="vm.toggleSidenav()">
+			<md-icon class="material-icons">settings</md-icon>
+			Configurações
+		</md-list-item>
+		<md-list-item ng-click="vm.logout()">
+			<md-icon class="material-icons">exit_to_app</md-icon>
+			Sair
+		</md-list-item>
+	</md-list>
+</md-sidenav>
+<md-toolbar>
+	<div class="md-toolbar-tools">
+		<md-button class="md-icon-button" ng-click="vm.toggleSidenav()" ng-if="adminLogged">
+			<md-icon class="material-icons">menu</md-icon>
+		</md-button>
+		<span class="md-title">{{ vm.route.current.title }}</span>
+	</div>
+</md-toolbar>

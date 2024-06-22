@@ -1,0 +1,13 @@
+<md-content layout-padding>
+	<form name="settingsForm" layout="column">
+		<span class="md-subhead" style="padding-top: 5px; padding-bottom: 10px;">Cor do painel</span>
+		<md-radio-group ng-model="panelTheme">
+			<md-radio-button value="liffy-blue">Azul</md-radio-button>
+			<md-radio-button value="liffy-pink">Rosa</md-radio-button>
+			<md-radio-button value="liffy-green">Verde</md-radio-button>
+			<md-radio-button value="liffy-orange">Laranja</md-radio-button>
+			<md-radio-button value="liffy-red">Vermelho</md-radio-button>
+		</md-radio-group>
+		<md-button class="md-primary md-raised" ng-click="vm.changeTheme(panelTheme)">Salvar</md-button>
+	</form>
+</md-content>

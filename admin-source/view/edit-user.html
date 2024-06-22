@@ -1,0 +1,24 @@
+<md-content layout-padding>
+	<form name="editUserForm" layout="column">
+		<md-input-container>
+			<input type="email" placeholder="E-mail" name="email" ng-model="vm.user.email" ng-required="true" />
+			<div ng-messages="editUserForm.email.$error">
+				<span ng-message="required">Este campo é necessário.</span>
+				<span ng-message="email">O email inserido deve ser válido.</span>
+			</div>
+		</md-input-container>
+		<md-input-container>
+			<input type="text" placeholder="Telefone" name="phone" ng-model="vm.user.phone" ng-required="true" ui-br-phone-number />
+			<div ng-messages="editUserForm.phone.$error">
+				<span ng-message="required">Este campo é necessário.</span>
+				<span ng-message="cpf">Insira um número de telefone válido.</span>
+			</div>
+		</md-input-container>
+		<p>Status:</p>
+		<md-radio-group ng-model="vm.user.blocked" ng-required="true" name="blocked">
+			<md-radio-button value="false">Ativo</md-radio-button>
+			<md-radio-button value="true">Bloqueado</md-radio-button>
+		</md-radio-group>
+		<md-button type="submit" class="md-primary md-raised" ng-click="vm.saveData({blocked: vm.user.blocked, id: vm.user._id, email: vm.user.email, phone: vm.user.phone})" ng-disabled="editUserForm.$invalid || vm.userEditButtonDisabled">{{ vm.userEditButtonDisabled ? 'Salvando...' : 'Salvar' }}</md-button>
+	</form>
+</md-content>

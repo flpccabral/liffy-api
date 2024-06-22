@@ -1,0 +1,23 @@
+<md-content>
+	<md-subheader class="md-primary">{{ vm.bugsLoaded ? vm.bugs.length + ' bugs registrados' : 'Carregando bugs...' }}</md-subheader>
+	<md-table-container>
+		<table md-table>
+			<thead md-head>
+				<tr md-row>
+					<th md-column>Detalhes</th>
+					<th md-column>Enviado em</th>
+					<th md-column>Ações</th>
+				</tr>
+			</thead>
+			<tbody md-body>
+				<tr md-row ng-repeat="bug in vm.bugs | orderBy:_id:true">
+					<td md-cell>{{ bug.info }}</td>
+					<td md-cell>{{ bug.sentAt | date }}</td>
+					<td md-cell>
+						<md-button class="action-button md-warn" ng-click="vm.deleteBug(bug._id, $event)">Excluir</md-button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</md-table-container>
+</md-content>

@@ -1,0 +1,12 @@
+<md-content layout-padding>
+	<form name="signForm" layout="column">
+		<md-input-container>
+			<input type="password" name="code" ng-model="code" placeholder="Digite o seu código de acesso" ng-required="true" />
+			<div ng-messages="signForm.code.$error">
+				<span ng-message="required">Este campo é necessário.</span>
+			</div>
+		</md-input-container>
+		<md-button type="submit" class="md-raised md-primary" ng-click="vm.login({code: code})" ng-disabled="signForm.$invalid || vm.signFormButtonDisabled">{{ vm.signFormButtonDisabled ? 'Validando código...' : 'Entrar' }}</md-button>
+		<md-button class="md-raised md-primary" ng-click="vm.requestCode()" ng-disabled="vm.requestCodeButtonDisabled">{{ vm.requestCodeButtonDisabled ? 'Requisitando código...' : 'Requisitar código' }}</md-button>
+	</form>
+</md-content>
