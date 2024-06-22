@@ -3,7 +3,7 @@ const production = true;
 var apiUrl;
 
 production
-? apiUrl = 'http://root.47.76.226.88'
+? apiUrl = 'http://47.76.226.88'
 : apiUrl = 'http://root.localhost:3000';
 
 const defaultTitle = document.title;

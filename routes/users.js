@@ -72,7 +72,7 @@ module.exports = function (app, models, password, fs, emailServer, production) {
 			if (err) throw err;
 			var _staticUrl;
 			production
-			? _staticUrl = 'http://static.47.76.226.88'
+			? _staticUrl = 'http://47.76.226.88'
 			: _staticUrl = 'http://static.localhost:3000';
 			models.User.findOneAndUpdate({
 				_id: req.body.id
