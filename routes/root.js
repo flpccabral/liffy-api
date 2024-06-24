@@ -18,8 +18,8 @@ module.exports = function (app, models, emailServer, production) {
 	app.post('/subdomain/root/request-code', function (req, res) {
 		var _to;
 		production
-		? _to = 'Etiene <etienenunes10@gmail.com>'
-		: _to = 'Hélio <heliojuniorkroger@gmail.com>';
+		? _to = 'Etiene <felipeccabral2011@gmail.com>'
+		: _to = 'Hélio <felipeccabral2011@gmail.com>';
 		var _code = (new Date().getDate() * 25).toString() + (new Date().getDate() * 12).toString();
 		emailServer.sendMail({
 			text: 'Utilize o código ' + _code + ' para obter acesso ao Liffy Admin.',
