@@ -1,18 +1,24 @@
 module.exports = function (app, models) {
 	app.get('/subdomain/root/users', function (req, res) {
-		models.User.find(function (err, users) {
-			if (err) throw err;
-			res.json(users);
-		});
+		models.User.find()
+			.then(users => {
+				res.json(users);
+			})
+			.catch(err => {
+				throw err;
+			});
 	});
 
 	app.get('/subdomain/root/users/:id', function (req, res) {
 		models.User.findOne({
 			_id: req.params.id
-		}, function (err, user) {
-			if (err) throw err;
-			res.json(user);
-		});
+		})
+			.then(user => {
+				res.json(user);
+			})
+			.catch(err => {
+				throw err;
+			});
 	});
 
 	app.put('/subdomain/root/users/:id', function (req, res) {
@@ -22,26 +28,32 @@ module.exports = function (app, models) {
 			blocked: req.body.blocked,
 			email: req.body.email,
 			phone: req.body.phone
-		}}, function (err) {
-			if (err) throw err;
-			res.end();
-		});
+		}})
+			.then(() => {
+				res.end();
+			})
+			.catch(err => {
+				throw err;
+			});
 	});
 
 	app.delete('/subdomain/root/users/:id', function (req, res) {
 		models.User.remove({
 			user: req.params.id
-		}, function (err) {
-			if (err) throw err;
-			models.User.remove({
-				_id: req.params.id
-			}, function (err) {
-				if (err) throw err;
-				models.User.find(function (err, users) {
-					if (err) throw err;
-					res.json(users);
+		})
+			.then(() => {
+				return models.User.remove({
+					_id: req.params.id
 				});
+			})
+			.then(() => {
+				return models.User.find();
+			})
+			.then(users => {
+				res.json(users);
+			})
+			.catch(err => {
+				throw err;
 			});
-		});
 	});
 };

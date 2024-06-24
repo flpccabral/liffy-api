@@ -13,9 +13,12 @@ module.exports = function (app, models, production) {
 				lng: req.body.destination.lng
 			},
 			type: req.body.type
-		}, function (err, travel) {
-			if (err) throw err;
+		})
+		.then(function (travel) {
 			res.json(travel);
+		})
+		.catch(function (err) {
+			throw err;
 		});
 	});
 
@@ -26,10 +29,13 @@ module.exports = function (app, models, production) {
 		.populate('user')
 		.populate('driver')
 		.populate('code')
-			.exec(function (err, travel) {
-				if (err) throw err;
-				res.json(travel);
-			});
+		.exec()
+		.then(function (travel) {
+			res.json(travel);
+		})
+		.catch(function (err) {
+			throw err;
+		});
 	});
 
 	app.put('/subdomain/api/travels/:id', function (req, res) {
@@ -38,9 +44,12 @@ module.exports = function (app, models, production) {
 		}, {$set: {
 			distance: req.body.distance,
 			observation: req.body.observation
-		}}, {new: true}, function (err, travel) {
-			if (err) throw err;
+		}}, {new: true})
+		.then(function (travel) {
 			res.json(travel);
+		})
+		.catch(function (err) {
+			throw err;
 		});
 	});
 
@@ -50,9 +59,12 @@ module.exports = function (app, models, production) {
 		}, {$set: {
 			paymentMethod: req.body.paymentMethod,
 			date: new Date().getTime()
-		}}, {new: true}, function (err, travel) {
-			if (err) throw err;
+		}}, {new: true})
+		.then(function (travel) {
 			res.json(travel);
+		})
+		.catch(function (err) {
+			throw err;
 		});
 	});
 
@@ -61,18 +73,24 @@ module.exports = function (app, models, production) {
 			_id: req.params.id
 		}, {$set: {
 			driver: req.body.driver
-		}}, function (err, travel) {
-			if (err) throw err;
+		}})
+		.then(function (travel) {
 			res.end();
+		})
+		.catch(function (err) {
+			throw err;
 		});
 	});
 
 	app.delete('/subdomain/api/travels/:id/cancel', function (req, res) {
 		models.Travel.remove({
 			_id: req.params.id
-		}, function (err) {
-			if (err) throw err;
+		})
+		.then(function () {
 			res.end();
+		})
+		.catch(function (err) {
+			throw err;
 		});
 	});
 
@@ -82,20 +100,27 @@ module.exports = function (app, models, production) {
 		}, {$set: {
 			done: true,
 			elapsedTime: req.body.elapsedTime
-		}}, function (err, travel) {
-			if (err) throw err;
+		}})
+		.then(function (travel) {
 			if (travel.paymentMethod === 'paypal') {
-				models.Driver.findOneAndUpdate({
+				return models.Driver.findOneAndUpdate({
 					_id: travel.driver
 				}, {$inc: {
 					balance: (travel.distance * (travel.type === 'default' ? 1.4 : 2.10) + (travel.type === 'default' ? 2.7 : 4.5)) * 0.8
-				}}, {new: true}, function (err, driver) {
-					if (err) throw err;
-					res.json(driver);
-				});
+				}}, {new: true});
+			} else {
+				return Promise.resolve();
+			}
+		})
+		.then(function (driver) {
+			if (driver) {
+				res.json(driver);
 			} else {
 				res.end();
-			};
+			}
+		})
+		.catch(function (err) {
+			throw err;
 		});
 	});
 
@@ -107,9 +132,12 @@ module.exports = function (app, models, production) {
 				stars: req.body.stars,
 				comment: req.body.comment
 			}
-		}}, function (err) {
-			if (err) throw err;
+		}})
+		.then(function () {
 			res.end();
+		})
+		.catch(function (err) {
+			throw err;
 		});
 	});
 
@@ -118,46 +146,56 @@ module.exports = function (app, models, production) {
 			_id: req.params.id
 		}, {$set: {
 			started: true
-		}}, {new: true}, function (err) {
-			if (err) throw err;
+		}}, {new: true})
+		.then(function () {
 			res.end();
+		})
+		.catch(function (err) {
+			throw err;
 		});
 	});
 
 	app.put('/subdomain/api/travels/:id/insert-promotional-code', function (req, res) {
 		models.PromotionalCode.findOne({
 			code: req.body.code
-		}, function (err, code) {
-			if (err) throw err;
+		})
+		.then(function (code) {
 			if (code) {
 				if (code.used === true) {
 					res.status(400);
 					res.send('Code already taken.');
 				} else {
-					models.PromotionalCode.findOneAndUpdate({
+					return models.PromotionalCode.findOneAndUpdate({
 						code: code.code
 					}, {
 						used: true
-					}, {new: true}, function (err, code) {
-						if (err) throw err;
-						models.Travel.findOneAndUpdate({
-							_id: req.params.id
-						}, {$set: {
-							code: code
-						}}, {new: true})
-							.populate('user')
-							.populate('driver')
-							.populate('code')
-								.exec(function (err, travel) {
-									if (err) throw err;
-									res.json(travel);
-								});
-					});
-				};
+					}, {new: true});
+				}
 			} else {
 				res.status(400);
 				res.send('Invalid code.');
-			};
+			}
+		})
+		.then(function (code) {
+			if (code) {
+				return models.Travel.findOneAndUpdate({
+					_id: req.params.id
+				}, {$set: {
+					code: code
+				}}, {new: true})
+				.populate('user')
+				.populate('driver')
+				.populate('code')
+				.exec();
+			}
+		})
+		.then(function (travel) {
+			if (travel) {
+				res.json(travel);
+			}
+		})
+		.catch(function (err) {
+			throw err;
 		});
 	});
 };
