@@ -13,7 +13,7 @@ app.use(bodyParser.json({
 
 app.use(cors());
 
-const production = false;
+const production = true;
 
 require('./routes')(app, models, express, emailServer, production);
 require('./socket-events')(io, models);
