@@ -5,6 +5,12 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const models = require('./models');
 const emailServer = require('./email');
+const io = require('socket.io')(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
 
 app.use(bodyParser.json({
 	limit: '50MB'
@@ -16,13 +22,6 @@ const production = true;
 
 require('./routes')(app, models, express, emailServer, production);
 require('./socket-events')(io, models);
-
-const io = require('socket.io')(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-    }
-});
 
 var port;
 
