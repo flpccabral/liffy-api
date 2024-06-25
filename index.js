@@ -1,11 +1,11 @@
 const express = require('express');
 const app = express();
-const http = require('http').Server(app);
+const http = require('http').Server(app); // Cria um servidor HTTP com Express
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const models = require('./models');
 const emailServer = require('./email');
-const io = require('socket.io')(server, {
+const io = require('socket.io')(http, { // Usa o servidor HTTP para inicializar o Socket.IO
     cors: {
         origin: "*",
         methods: ["GET", "POST"]
@@ -13,7 +13,7 @@ const io = require('socket.io')(server, {
 });
 
 app.use(bodyParser.json({
-	limit: '50MB'
+    limit: '50MB'
 }));
 
 app.use(cors());
@@ -23,10 +23,8 @@ const production = true;
 require('./routes')(app, models, express, emailServer, production);
 require('./socket-events')(io, models);
 
-var port;
+var port = production ? 80 : 3000; // Simplificação da atribuição de porta
 
-production
-? port = 80
-: port = 3000;
-
-http.listen(port);
+http.listen(port, () => { // Alterado para usar o servidor HTTP para escutar na porta especificada
+    console.log(`Server running on port ${port}`);
+});
