@@ -5,10 +5,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const models = require('./models');
 const emailServer = require('./email');
-const io = require('socket.io')(http, { // Usa o servidor HTTP para inicializar o Socket.IO
+const io = require('socket.io')(http, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: "http://localhost:8000", // Especifique o domínio de origem aqui
+        methods: ["GET", "POST"],
+        credentials: true // Habilita o suporte a credenciais
     }
 });
 
