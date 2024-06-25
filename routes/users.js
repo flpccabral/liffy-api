@@ -30,9 +30,6 @@ module.exports = function (app, models, password, fs, emailServer, production) {
 						password: password,
 						photo: 'images/user-default.png',
 						registeredAt: new Date().getTime()
-					}, function (err, user) {
-						if (err) throw err;
-						res.json(user);
 					});
 				});
 			};
