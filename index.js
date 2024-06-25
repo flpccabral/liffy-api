@@ -25,6 +25,10 @@ const production = true;
 require('./routes')(app, models, express, emailServer, production);
 require('./socket-events')(io, models);
 
+socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
+
 var port = production ? 80 : 3000; // Simplificação da atribuição de porta
 
 http.listen(port, () => { // Alterado para usar o servidor HTTP para escutar na porta especificada
