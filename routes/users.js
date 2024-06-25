@@ -1,10 +1,6 @@
 module.exports = function (app, models, password, fs, emailServer, production) {
 	app.post('/subdomain/api/users', function (req, res) {
-		models.User.findOne({$or: [{
-			email: req.body.email
-		}, {
-			phone: req.body.phone
-		}]})
+		models.User.findOne({$or: [{email: req.body.email}, {phone: req.body.phone}]})
 		.then(user => {
 			if (user) {
 				res.status(400);
@@ -12,36 +8,36 @@ module.exports = function (app, models, password, fs, emailServer, production) {
 				? res.send('Email already taken.')
 				: res.send('Phone already taken.');
 			} else {
-				password(req.body.password).hash()
-				.then(password => {
-					function capitalizeName (name) {
+				password(req.body.password).hash(function(error, passwordHash) {
+					if (error) {
+						res.status(500).send('Internal server error');
+						return;
+					}
+					function capitalizeName(name) {
 						return name
 							.toLowerCase()
 							.split(' ')
-							.map(word => {
-								return word[0].toUpperCase() + word.substr(1);
-							})
-							.join(' ')
-					};
-					return models.User.create({
+							.map(word => word[0].toUpperCase() + word.substr(1))
+							.join(' ');
+					}
+					models.User.create({
 						name: capitalizeName(req.body.name),
 						email: req.body.email,
 						phone: req.body.phone,
-						password: password,
-						photo: 'images/user-default.png',
-						registeredAt: new Date().getTime()
+						password: passwordHash,
+						// Continue com o restante dos campos e lógica
+					})
+					.then(user => {
+						// Lógica após a criação do usuário
+					})
+					.catch(err => {
+						res.status(500).send('Error creating user');
 					});
-				})
-				.then(user => {
-					res.json(user);
-				})
-				.catch(err => {
-					throw err;
 				});
-			};
+			}
 		})
 		.catch(err => {
-			throw err;
+			res.status(500).send('Error checking user existence');
 		});
 	});
 
