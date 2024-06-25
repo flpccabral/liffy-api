@@ -47,27 +47,29 @@ module.exports = function (app, models, password, fs, emailServer, production) {
 		})
 		.then(user => {
 			if (user) {
-				return password(req.body.password).verifyAgainst(user.password);
+				return password(req.body.password).verifyAgainst(user.password)
+				.then(verified => {
+					if (verified) {
+						if (user.blocked) {
+							res.status(400).send('User blocked.');
+							return; // Garante que a execução pare aqui
+						} else {
+							res.json(user);
+							return; // Garante que a execução pare aqui
+						}
+					} else {
+						res.status(400).send('Invalid login.');
+						return; // Garante que a execução pare aqui
+					}
+				});
 			} else {
-				res.status(400);
-				res.send('Invalid login.');
+				res.status(400).send('Invalid login.');
+				return; // Garante que a execução pare aqui
 			}
 		})
-		.then(verified => {
-			if (verified) {
-				if (user.blocked) {
-					res.status(400);
-					res.send('User blocked.');
-				} else {
-					res.json(user);
-				};
-			} else {
-				res.status(400);
-				res.send('Invalid login.');
-			};
-		})
 		.catch(err => {
-			throw err;
+			res.status(500).send('Internal server error');
+			return; // Garante que a execução pare aqui
 		});
 	});
 
