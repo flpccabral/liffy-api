@@ -47,7 +47,7 @@ module.exports = function (app, models, password, fs, emailServer, production) {
 		})
 		.then(user => {
 			if (user) {
-				return password(req.body.password).verifyAgainst(user.password)
+				password(req.body.password).verifyAgainst(user.password)
 				.then(verified => {
 					if (verified) {
 						if (user.blocked) {
