@@ -18,7 +18,8 @@
     "mongoose": "^8.4.3",
     "nodemailer": "^6.9.14",
     "password-hash-and-salt": "^0.1.4",
-    "socket.io": "^4.7.5"
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5"
   },
   "devDependencies": {
     "gulp": "^5.0.0",

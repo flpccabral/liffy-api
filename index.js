@@ -9,7 +9,8 @@ const io = require('socket.io')(http, {
     cors: {
         origin: "http://localhost:8000", // Especifique o domínio de origem aqui
         methods: ["GET", "POST"],
-        credentials: true // Habilita o suporte a credenciais
+        credentials: true, // Habilita o suporte a credenciais
+        allowEIO3: false
     }
 });
 
