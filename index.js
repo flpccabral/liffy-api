@@ -25,7 +25,7 @@ const production = true;
 require('./routes')(app, models, express, emailServer, production);
 require('./socket-events')(io, models);
 
-socket.on("connect_error", (err) => {
+io.on("connect_error", (err) => {
     console.log(`connect_error due to ${err.message}`);
   });
 
